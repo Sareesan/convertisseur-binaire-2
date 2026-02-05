@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convertisseur Numérique</title>
+
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #020617;
+  --accent: #38bdf8;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #020617, #0f172a);
+  font-family: system-ui, -apple-system, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
+.app {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 22px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background: #020617;
+  color: var(--text);
+  border: 1px solid #1e293b;
+}
+
+button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--accent);
+  color: #020617;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.results {
+  margin-top: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.result {
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.result label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.result div {
+  margin-top: 4px;
+  word-break: break-all;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+  <h1>Convertisseur Numérique</h1>
+
+  <div class="input-group">
+    <input id="input" placeholder="Nombre ou texte">
+  </div>
+
+  <button onclick="convert()">Convertir</button>
+
+  <div class="results">
+    <div class="result">
+      <label>Décimal</label>
+      <div id="decimal">—</div>
+    </div>
+    <div class="result">
+      <label>Binaire</label>
+      <div id="binary">—</div>
+    </div>
+    <div class="result">
+      <label>Hexadécimal</label>
+      <div id="hexa">—</div>
+    </div>
+    <div class="result">
+      <label>ASCII</label>
+      <div id="ascii">—</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function convert() {
+  const input = document.getElementById("input").value.trim();
+
+  let decimal = "—";
+  let binary = "—";
+  let hexa = "—";
+  let ascii = "—";
+
+  if (input === "") return;
+
+  if (!isNaN(input)) {
+    const num = parseInt(input, 10);
+    decimal = num;
+    binary = num.toString(2);
+    hexa = num.toString(16).toUpperCase();
+    ascii = num >= 32 && num <= 126 ? String.fromCharCode(num) : "Non imprimable";
+  }
+  else if (/^[01]+$/.test(input)) {
+    const num = parseInt(input, 2);
+    decimal = num;
+    binary = input;
+    hexa = num.toString(16).toUpperCase();
+    ascii = String.fromCharCode(num);
+  }
+  else if (/^[0-9a-fA-F]+$/.test(input)) {
+    const num = parseInt(input, 16);
+    decimal = num;
+    binary = num.toString(2);
+    hexa = input.toUpperCase();
+    ascii = String.fromCharCode(num);
+  }
+  else {
+    ascii = input.split("").map(c => c.charCodeAt(0)).join(" ");
+  }
+
+  document.getElementById("decimal").textContent = decimal;
+  document.getElementById("binary").textContent = binary;
+  document.getElementById("hexa").textContent = hexa;
+  document.getElementById("ascii").textContent = ascii;
+}
+</script>
+
+</body>
+</html>
